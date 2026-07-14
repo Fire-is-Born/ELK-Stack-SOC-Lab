@@ -51,6 +51,7 @@ Provisioned an Ubuntu cloud instance in Vultr and secured remote access by creat
 
 <img width="2522" height="506" alt="image" src="https://github.com/user-attachments/assets/44478cdf-045e-48cd-ad56-eaf26c34a698" />
 
+<img width="2544" height="536" alt="image" src="https://github.com/user-attachments/assets/1a31ce20-911b-4fd9-bd56-b9e23d9000b7" />
 
 ---
 
