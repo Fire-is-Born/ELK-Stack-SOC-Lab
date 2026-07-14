@@ -47,7 +47,10 @@ The ELK Stack is deployed within a Vultr Virtual Private Cloud (VPC) and serves 
 
 ## 2. Deploying the ELK Stack
 
-*To be completed...*
+Provisioned an Ubuntu cloud instance in Vultr and secured remote access by creating a firewall group that permits SSH connections only from my public IP address. After establishing a secure connection via SSH, I installed Elasticsearch, enabled the service to start automatically at boot, and confirmed the deployment by verifying that the Elasticsearch service was running successfully.
+
+<img width="2522" height="506" alt="image" src="https://github.com/user-attachments/assets/44478cdf-045e-48cd-ad56-eaf26c34a698" />
+
 
 ---
 
