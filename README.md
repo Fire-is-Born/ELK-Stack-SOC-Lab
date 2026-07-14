@@ -51,6 +51,15 @@ Provisioned an Ubuntu cloud instance in Vultr and secured remote access by creat
 
 <img width="2522" height="506" alt="image" src="https://github.com/user-attachments/assets/44478cdf-045e-48cd-ad56-eaf26c34a698" />
 
+Installed Kibana on the Ubuntu server. After confirming that Elasticsearch was running successfully, I generated a Kibana enrolment token from the `elasticsearch/bin` directory to securely authenticate Kibana with the Elasticsearch cluster.
+
+**Command**
+
+```bash
+./elasticsearch-create-enrollment-token --scope kibana
+```
+
+The generated token was then used during Kibana's initial setup to establish a trusted connection with the Elasticsearch deployment, allowing Kibana to communicate securely with the cluster.
 <img width="2544" height="536" alt="image" src="https://github.com/user-attachments/assets/1a31ce20-911b-4fd9-bd56-b9e23d9000b7" />
 
 ---
