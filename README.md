@@ -1,36 +1,92 @@
-# ELK-Stack-SOC-Lab
+# ELK Stack SOC Homelab
 
 ## Objective
 
-Create an end-to-end SOC homelab to simulate, detect, and investigate real-world cyber attacks.
+Build an end-to-end Security Operations Centre (SOC) homelab using the ELK Stack, Sysmon, and Mythic C2 to simulate, detect, and investigate real-world cyber attacks.
 
+---
 
-### Skills Learned
+## Skills Learned
 
 - Deployment and configuration of a complete ELK Stack (Elasticsearch, Logstash, and Kibana).
-- Collection and analysis of Windows and Linux logs using Sysmon and Elastic Agent.
-- Development of detection rules, alerts, and security dashboards for threat monitoring.
-- Practical experience simulating adversary activity using Mythic C2.
+- Centralised log collection and analysis from Windows and Linux endpoints.
+- Configuration of Elastic Agent and Fleet for endpoint management.
+- Development of detection rules, alerts, and security dashboards.
+- Practical experience simulating adversary behaviour using Mythic C2.
 - Investigation of security events through log analysis and incident response workflows.
 - Improved understanding of Security Operations Centre (SOC) processes and detection engineering.
-- Strengthened analytical thinking and problem-solving through hands-on threat investigation.
+- Strengthened analytical thinking and problem-solving through hands-on threat investigations.
 
-### Tools Used
+---
 
-- **Elasticsearch** for storing, indexing, and searching security logs.
-- **Logstash** for collecting, processing, and forwarding log data.
-- **Kibana** for visualising logs, creating dashboards, and investigating security events.
-- **Sysmon** for enhanced Windows endpoint telemetry and event logging.
-- **Mythic C2** for simulating adversary behaviour and command-and-control activity.
-- **VirtualBox** for hosting the virtual SOC lab environment.
-- **Windows Event Logs** and **Linux system logs** for endpoint monitoring and analysis.
+## Tools Used
 
+- **Elasticsearch** – Centralised storage, indexing, and searching of security logs.
+- **Logstash** – Log ingestion, parsing, and data processing.
+- **Kibana** – Visualisation, dashboards, and security investigations.
+- **Elastic Agent & Fleet** – Endpoint management and log collection.
+- **Sysmon** – Enhanced Windows endpoint telemetry.
+- **Mythic C2** – Adversary simulation and command-and-control framework.
+- **osTicket** – Ticketing and incident management workflow.
+- **VirtualBox** – Virtual machine hosting for the lab environment.
+- **Windows Event Logs** & **Linux System Logs** – Endpoint telemetry and monitoring.
 
-## Steps
-drag & drop screenshots here or use imgur and reference them using imgsrc
+---
 
-Every screenshot should have some text explaining what the screenshot is about.
+# Lab Build Process
 
-Example below.
+## 1. Lab Architecture
 
-*Ref 1: Network Diagram*
+The diagram below illustrates the overall architecture of the SOC homelab.
+
+The ELK Stack is deployed within a Vultr Virtual Private Cloud (VPC) and serves as the central logging and monitoring platform. Windows and Ubuntu endpoints forward telemetry through Elastic Agent, managed centrally using Fleet. A dedicated Kali Linux attack machine and Mythic C2 server are used to simulate realistic adversary activity, while alerts generated within Elastic can be tracked using osTicket as part of a basic incident response workflow. The SOC analyst connects remotely to Kibana to monitor, investigate, and respond to security events.
+
+<img width="804" height="949" alt="SOC Architecture" src="https://github.com/user-attachments/assets/c644fd2e-a910-4057-949f-4097933a43d0" />
+
+---
+
+## 2. Deploying the ELK Stack
+
+*To be completed...*
+
+---
+
+## 3. Configuring Fleet and Elastic Agents
+
+*To be completed...*
+
+---
+
+## 4. Onboarding Windows and Linux Endpoints
+
+*To be completed...*
+
+---
+
+## 5. Deploying Mythic C2
+
+*To be completed...*
+
+---
+
+## 6. Simulating Attacker Activity
+
+*To be completed...*
+
+---
+
+## 7. Creating Detection Rules and Dashboards
+
+*To be completed...*
+
+---
+
+## 8. Investigating Security Alerts
+
+*To be completed...*
+
+---
+
+## 9. Lessons Learned
+
+*To be completed...*
