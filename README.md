@@ -91,46 +91,5 @@ After restarting the service, logged back into Kibana and verified that the conf
 
 ---
 
-## 2.4 Verification
-
-Verified that Elasticsearch and Kibana were communicating successfully by accessing the Kibana web interface and confirming that the deployment completed without errors. At this stage, the ELK Stack was fully operational and ready for Fleet Server deployment and endpoint onboarding.
-
-## 3. Configuring Fleet and Elastic Agents
-
-*To be completed...*
-
----
-
-## 4. Onboarding Windows and Linux Endpoints
-
-*To be completed...*
-
----
-
-## 5. Deploying Mythic C2
-
-*To be completed...*
-
----
-
-## 6. Simulating Attacker Activity
-
-*To be completed...*
-
----
-
-## 7. Creating Detection Rules and Dashboards
-
-*To be completed...*
-
----
-
-## 8. Investigating Security Alerts
-
-*To be completed...*
-
----
-
-## 9. Lessons Learned
 
 *To be completed...*
