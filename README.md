@@ -62,6 +62,10 @@ Installed Kibana on the Ubuntu server. After confirming that Elasticsearch was r
 The generated token was then used during Kibana's initial setup to establish a trusted connection with the Elasticsearch deployment, allowing Kibana to communicate securely with the cluster.
 <img width="2544" height="536" alt="image" src="https://github.com/user-attachments/assets/1a31ce20-911b-4fd9-bd56-b9e23d9000b7" />
 
+Connected to Kibana using the enrolment token generated during the Elasticsearch setup. After logging in, configured the required three encryption keys in the kibana.yml configuration file via the SSH session. Restarted the Kibana service to apply the changes, then logged back in to verify the configuration. With the encryption keys in place, the Alerts dashboard and other security features became available.
+
+<img width="2549" height="1268" alt="image" src="https://github.com/user-attachments/assets/8bffe90d-2f15-47cf-8c78-76b558740850" />
+
 ---
 
 ## 3. Configuring Fleet and Elastic Agents
