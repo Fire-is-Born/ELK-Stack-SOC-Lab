@@ -39,9 +39,12 @@ Build an end-to-end Security Operations Centre (SOC) homelab using the ELK Stack
 
 The diagram below illustrates the overall architecture of the SOC homelab.
 
-The ELK Stack is deployed within a Vultr Virtual Private Cloud (VPC) and serves as the central logging and monitoring platform. Windows and Ubuntu endpoints forward telemetry using Elastic Agent, managed centrally through Fleet. A dedicated Kali Linux attack machine and Mythic C2 server are used to simulate realistic adversary activity, while alerts generated within Elastic are tracked through osTicket as part of a basic incident response workflow. The SOC analyst connects remotely to Kibana to monitor, investigate, and respond to security events.
+The core security infrastructure is hosted within a Vultr Virtual Private Cloud (VPC), where Elasticsearch, Kibana, Fleet Server, and osTicket are isolated from the monitored systems. This provides a dedicated private network for the logging and monitoring platform.
 
-<img width="804" height="949" alt="SOC Architecture" src="https://github.com/user-attachments/assets/c644fd2e-a910-4057-949f-4097933a43d0" />
+Windows and Ubuntu endpoints are hosted outside the VPC and securely forward telemetry using Elastic Agent, with Fleet providing centralised agent management. A dedicated Kali Linux attack machine and Mythic C2 server are used to simulate adversary activity, while the SOC analyst connects remotely to Kibana to monitor, investigate, and respond to security events.
+
+<img width="808" height="875" alt="image" src="https://github.com/user-attachments/assets/ca629d5f-51b0-447e-ba67-f17a8bd33504" />
+
 
 ---
 
@@ -91,5 +94,7 @@ After restarting the service, logged back into Kibana and verified that the conf
 
 ---
 
+Deployed a Windows Server 2022 cloud instance outside the Vultr VPC to simulate a monitored endpoint on an external network. Configured Remote Desktop Protocol (RDP) to allow inbound connections from the internet, enabling the server to receive automated scans and authentication attempts. This generated realistic Windows security telemetry, which will be collected by Elastic Agent and forwarded to the ELK Stack for analysis, detection engineering, and threat hunting.
+---
 
 *To be completed...*
