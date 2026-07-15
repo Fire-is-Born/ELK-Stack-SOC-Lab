@@ -94,10 +94,30 @@ After restarting the service, logged back into Kibana and verified that the conf
 
 ---
 
-## 2.3 Installing Windows Server
+## 3.0 Installing Windows Server
 
 Deployed a Windows Server 2022 cloud instance outside the Vultr VPC to simulate a monitored endpoint on an external network. Configured Remote Desktop Protocol (RDP) to allow inbound connections from the internet, enabling the server to receive automated scans and authentication attempts. This generated realistic Windows security telemetry, which will be collected by Elastic Agent and forwarded to the ELK Stack for analysis, detection engineering, and threat hunting.
 
 ---
+
+
+## 3.1 Installing Elastic Agent
+
+To onboard the Windows endpoint into the ELK Stack, Elastic Agent was downloaded directly from the Fleet management interface and installed using the generated enrolment command.
+
+During deployment, the Fleet Server was configured to listen on **TCP port 8220**. The Windows server was granted access to this port through the Vultr firewall, allowing secure communication between the endpoint and Fleet Server.
+
+After successful enrolment, the Elastic Agent appeared in **Fleet**, confirming that the endpoint was communicating successfully with the Fleet Server and receiving its assigned policy.
+
+---
+
+## 3.2 Verifying Log Ingestion
+
+With the agent successfully enrolled, Windows Security events began flowing into Elasticsearch. Using Kibana Discover, the Windows host was filtered to verify that authentication events and other telemetry were being ingested correctly.
+
+This confirmed that the Windows endpoint was successfully forwarding logs to the ELK Stack and was ready for detection engineering, threat hunting, and attack simulation.
+
+<img width="2550" height="630" alt="image" src="https://github.com/user-attachments/assets/9cf3b19f-1936-4cf6-b13b-c14788c4f1d6" />
+
 
 *To be completed...*
