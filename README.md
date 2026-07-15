@@ -39,19 +39,29 @@ Build an end-to-end Security Operations Centre (SOC) homelab using the ELK Stack
 
 The diagram below illustrates the overall architecture of the SOC homelab.
 
-The ELK Stack is deployed within a Vultr Virtual Private Cloud (VPC) and serves as the central logging and monitoring platform. Windows and Ubuntu endpoints forward telemetry through Elastic Agent, managed centrally using Fleet. A dedicated Kali Linux attack machine and Mythic C2 server are used to simulate realistic adversary activity, while alerts generated within Elastic can be tracked using osTicket as part of a basic incident response workflow. The SOC analyst connects remotely to Kibana to monitor, investigate, and respond to security events.
+The ELK Stack is deployed within a Vultr Virtual Private Cloud (VPC) and serves as the central logging and monitoring platform. Windows and Ubuntu endpoints forward telemetry using Elastic Agent, managed centrally through Fleet. A dedicated Kali Linux attack machine and Mythic C2 server are used to simulate realistic adversary activity, while alerts generated within Elastic are tracked through osTicket as part of a basic incident response workflow. The SOC analyst connects remotely to Kibana to monitor, investigate, and respond to security events.
 
 <img width="804" height="949" alt="SOC Architecture" src="https://github.com/user-attachments/assets/c644fd2e-a910-4057-949f-4097933a43d0" />
 
 ---
 
-## 2. Deploying the ELK Stack
+# 2. Deploying the ELK Stack
 
-Provisioned an Ubuntu cloud instance in Vultr and secured remote access by creating a firewall group that permits SSH connections only from my public IP address. After establishing a secure connection via SSH, I installed Elasticsearch, enabled the service to start automatically at boot, and confirmed the deployment by verifying that the Elasticsearch service was running successfully.
+## 2.1 Provisioning the Server
 
-<img width="2522" height="506" alt="image" src="https://github.com/user-attachments/assets/44478cdf-045e-48cd-ad56-eaf26c34a698" />
+Provisioned an Ubuntu cloud instance within Vultr and secured remote access by creating a firewall group that only permits SSH connections from my public IP address. After connecting via SSH, I updated the operating system before installing Elasticsearch.
 
-Installed Kibana on the Ubuntu server. After confirming that Elasticsearch was running successfully, I generated a Kibana enrolment token from the `elasticsearch/bin` directory to securely authenticate Kibana with the Elasticsearch cluster.
+Installed Elasticsearch, enabled the service to start automatically at boot, and verified that it was running successfully before continuing with the deployment.
+
+**Elasticsearch service running successfully**
+
+<img width="2522" height="506" alt="Elasticsearch Running" src="https://github.com/user-attachments/assets/44478cdf-045e-48cd-ad56-eaf26c34a698" />
+
+---
+
+## 2.2 Installing Kibana
+
+Installed Kibana on the Ubuntu server. Once Elasticsearch was confirmed to be operational, generated a Kibana enrolment token from the `elasticsearch/bin` directory to securely authenticate Kibana with the Elasticsearch cluster.
 
 **Command**
 
@@ -59,14 +69,31 @@ Installed Kibana on the Ubuntu server. After confirming that Elasticsearch was r
 ./elasticsearch-create-enrollment-token --scope kibana
 ```
 
-The generated token was then used during Kibana's initial setup to establish a trusted connection with the Elasticsearch deployment, allowing Kibana to communicate securely with the cluster.
-<img width="2544" height="536" alt="image" src="https://github.com/user-attachments/assets/1a31ce20-911b-4fd9-bd56-b9e23d9000b7" />
+The generated token was used during Kibana's initial setup to establish a trusted connection with the Elasticsearch deployment.
 
-Connected to Kibana using the enrolment token generated during the Elasticsearch setup. After logging in, configured the required three encryption keys in the kibana.yml configuration file via the SSH session. Restarted the Kibana service to apply the changes, then logged back in to verify the configuration. With the encryption keys in place, the Alerts dashboard and other security features became available.
+**Generating the Kibana enrolment token**
 
-<img width="2549" height="1268" alt="image" src="https://github.com/user-attachments/assets/8bffe90d-2f15-47cf-8c78-76b558740850" />
+<img width="2544" height="536" alt="Kibana Enrolment Token" src="https://github.com/user-attachments/assets/1a31ce20-911b-4fd9-bd56-b9e23d9000b7" />
 
 ---
+
+## 2.3 Configuring Kibana
+
+Connected to Kibana using the enrolment token generated during the previous step. During the initial configuration, Kibana prompted for three encryption keys required to securely store encrypted saved objects and enable alerting, actions, and other security features.
+
+Configured the required encryption keys within the `kibana.yml` configuration file via the SSH session before restarting the Kibana service to apply the changes.
+
+After restarting the service, logged back into Kibana and verified that the configuration had completed successfully. The **Alerts** dashboard and additional security features were now available.
+
+**Kibana Alerts dashboard after successful configuration**
+
+<img width="2549" height="1268" alt="Kibana Alerts Dashboard" src="https://github.com/user-attachments/assets/8bffe90d-2f15-47cf-8c78-76b558740850" />
+
+---
+
+## 2.4 Verification
+
+Verified that Elasticsearch and Kibana were communicating successfully by accessing the Kibana web interface and confirming that the deployment completed without errors. At this stage, the ELK Stack was fully operational and ready for Fleet Server deployment and endpoint onboarding.
 
 ## 3. Configuring Fleet and Elastic Agents
 
