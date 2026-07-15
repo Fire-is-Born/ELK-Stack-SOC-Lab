@@ -94,6 +94,8 @@ After restarting the service, logged back into Kibana and verified that the conf
 
 ---
 
+## 2.3 Installing Windows Server
+
 Deployed a Windows Server 2022 cloud instance outside the Vultr VPC to simulate a monitored endpoint on an external network. Configured Remote Desktop Protocol (RDP) to allow inbound connections from the internet, enabling the server to receive automated scans and authentication attempts. This generated realistic Windows security telemetry, which will be collected by Elastic Agent and forwarded to the ELK Stack for analysis, detection engineering, and threat hunting.
 
 ---
