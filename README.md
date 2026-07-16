@@ -120,4 +120,20 @@ This confirmed that the Windows endpoint was successfully forwarding logs to the
 <img width="2550" height="630" alt="image" src="https://github.com/user-attachments/assets/9cf3b19f-1936-4cf6-b13b-c14788c4f1d6" />
 
 
-*To be completed...*
+## 3.2 Sysmon
+
+Downloaded Sysmon and the Olaf Hartong configuration file, then installed Sysmon on the Windows endpoint using the custom configuration to enhance Windows event logging for security monitoring in Elastic.
+
+Added two **Custom Windows Event Logs** integrations in Elastic to collect endpoint security telemetry from the Windows machine. The first was configured to ingest **Sysmon** events from the **Microsoft-Windows-Sysmon/Operational** event channel, providing detailed visibility into process creation, network connections, file activity, and other endpoint events. The second was configured for **Microsoft Defender**, filtering ingestion to **Event IDs 1116, 1117, and 5001** to capture malware detections, remediation actions, and instances where Microsoft Defender real-time protection was disabled.
+
+
+<img width="2542" height="1171" alt="image" src="https://github.com/user-attachments/assets/fe705af8-bc21-4dc9-82dd-e17c056663af" />
+
+---
+
+Provisioned a new Ubuntu endpoint and configured the Elastic Agent to monitor /var/log/auth.log using a dedicated MyDFIR-Linux-Policy agent policy. Once the agent was enrolled, authentication logs began streaming into Elasticsearch, providing visibility into SSH login activity. Initial log analysis revealed multiple failed SSH authentication attempts, the majority originating from the IP address 111.235.76.92, indicating likely automated brute-force scanning against the exposed SSH service.
+
+<img width="2555" height="1158" alt="image" src="https://github.com/user-attachments/assets/64f4c070-5d96-4bae-8bb2-41318e60b166" />
+
+
+
