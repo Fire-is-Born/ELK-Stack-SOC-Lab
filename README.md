@@ -144,4 +144,23 @@ I added `system.auth.ssh.event`, `user.name`, `source.ip`, and `source.geo.count
 <img width="2231" height="1059" alt="image" src="https://github.com/user-attachments/assets/8c2d8ce4-963c-46dd-a949-84e9bcff8151" />
 
 
+### Creating an SSH Brute Force Alert
+
+I created an alert rule named `MyDFIR-Brute Force Activity` to detect when more than **5 failed SSH login attempts occur within a 5-minute window**, with the rule checking every minute.
+
+I am aware that this is a fairly basic detection rule and could generate false positives in a real production environment. However, for the purpose of this lab, it provides a good opportunity to practise creating alert rules and working through the detection and investigation process in Elastic.
+
+
+### Visualising Failed SSH Attempts
+
+To visualise where the failed SSH login attempts were coming from, I created a **Choropleth map** in Elastic Maps and applied the following KQL query:
+
+`system.auth.ssh.event: * and agent.name: MyDFIR-Linux and system.auth.ssh.event: Failed`
+
+I used `source.geo.country_iso_code` to map the events to their source countries. This provides a visual overview of the geographical locations associated with the failed SSH attempts.
+
+I then created a dashboard and added the map so the SSH activity could be monitored and visualised from one place.
+
+<img width="1684" height="818" alt="image" src="https://github.com/user-attachments/assets/d38f6287-ae5e-4711-959c-86fbe7460c4f" />
+
 
