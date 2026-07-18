@@ -165,7 +165,8 @@ I then created a dashboard and added the map so the SSH activity could be monito
 
 Also decided to duplicate that map and modify the KQL to show successful SSH attempts too. 
 
-<img width="1529" height="663" alt="image" src="https://github.com/user-attachments/assets/a2676580-c073-4559-ac55-085575d6fc94" />
+<img width="1536" height="1180" alt="image" src="https://github.com/user-attachments/assets/0670ae1c-4994-4827-9f86-4d47f4d5f507" />
+
 
 
 
