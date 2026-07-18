@@ -135,5 +135,13 @@ Provisioned a new Ubuntu endpoint and configured the Elastic Agent to monitor /v
 
 <img width="2555" height="1158" alt="image" src="https://github.com/user-attachments/assets/64f4c070-5d96-4bae-8bb2-41318e60b166" />
 
+### Investigating Failed SSH Login Attempts
+
+To look for failed SSH login attempts, I filtered `agent.name` to my Linux machine and then used `system.auth.ssh.event: Failed`, which returned **216 events**.
+
+I added `system.auth.ssh.event`, `user.name`, `source.ip`, and `source.geo.country_name` as columns. This made it easier to see which usernames were being used in the failed attempts, where the connections were coming from, and the countries associated with the source IPs.
+
+<img width="2231" height="1059" alt="image" src="https://github.com/user-attachments/assets/8c2d8ce4-963c-46dd-a949-84e9bcff8151" />
+
 
 
