@@ -285,4 +285,27 @@ The Mythic server was placed behind its own firewall, with rules configured to r
 This keeps the Mythic C2 infrastructure isolated from unnecessary external access while still allowing the required communication between the systems used throughout the attack simulation.
 <img width="2557" height="1113" alt="image" src="https://github.com/user-attachments/assets/57caebd5-7321-4f5c-b92f-2bba5fa284b6" />
 
+### Phase 1 – RDP Brute Force
+
+Created a `passwords.txt` file on the Windows victim machine to be used later in the attack simulation.
+
+On the Kali Linux attacker machine, I created a smaller custom wordlist using the first 50 entries from `rockyou.txt`:
+
+```bash
+sudo head -50 rockyou.txt > /home/kali/mydfir-wordlist.txt
+```
+
+Using a smaller wordlist is sufficient for this lab and avoids the need to run the attack using the entire `rockyou.txt` wordlist. I then added the correct password for the Windows `Administrator` account to `mydfir-wordlist.txt`.
+
+For the first phase of the attack simulation, I used **Hydra** to perform an RDP brute-force attack against the Windows victim machine using the newly created wordlist.
+
+The initial Hydra command experienced issues establishing multiple RDP connections, so I modified the command to reduce the number of simultaneous connections and add a delay between connection attempts:
+
+```bash
+hydra -t 1 -W 3 -l Administrator -P mydfir-wordlist.txt rdp://<WINDOWS_SERVER_IP>
+```
+
+This resulted successful authentication, providing realistic activity that can be investigated in Elastic using the detection rules and dashboard visualisations created earlier in the project.
+
+<img width="1678" height="281" alt="image" src="https://github.com/user-attachments/assets/bf9bdb61-b222-4236-89f8-0d6726e6b027" />
 
