@@ -232,4 +232,49 @@ These tables were added alongside the authentication maps on the dashboard. The 
 
 <img width="2555" height="1263" alt="image" src="https://github.com/user-attachments/assets/ac8f54a7-eb35-488f-92fd-1c19db9db025" />
 
+## Attack Simulation Plan
+
+To test the monitoring and detection capabilities of the SOC environment, I will carry out a simulated attack against the Windows Server. The attack will follow six phases, starting with initial access and ending with simulated data exfiltration.
+
+### Phase 1 – Initial Access
+
+The attack will begin from the Kali Linux attacker machine with an **RDP brute-force attack** against the Windows Server.
+
+After obtaining the correct credentials, I will successfully authenticate to the Windows Server via RDP. This will generate both failed and successful authentication activity that can be monitored and investigated in Elastic.
+
+### Phase 2 – Discovery
+
+Once access to the Windows Server has been gained, I will perform basic **system discovery** through the RDP session.
+
+This will simulate an attacker gathering information about the compromised machine and its environment before continuing with further actions.
+
+### Phase 3 – Defence Evasion
+
+The next phase will simulate an attacker attempting to weaken the security controls on the compromised system.
+
+While connected through RDP, I will attempt to **disable Microsoft Defender** on the Windows Server. This activity should generate security events that can later be identified and investigated in Elastic.
+
+### Phase 4 – Execution
+
+A **Mythic C2 agent** will be introduced to the compromised Windows Server.
+
+PowerShell IEX will be used as part of the process to retrieve the Mythic agent, which will then be transferred to the Windows Server and executed. This will simulate an attacker executing a malicious payload after gaining access to the system.
+
+### Phase 5 – Command and Control
+
+Once the Mythic agent is running, it will establish a **Command and Control (C2)** connection between the compromised Windows Server and the Mythic C2 server.
+
+This will simulate an attacker establishing remote communication with the compromised system, allowing commands to be issued through the C2 infrastructure.
+
+### Phase 6 – Exfiltration
+
+The final phase will simulate **data exfiltration** from the compromised Windows Server.
+
+A test file named `passwords.txt` containing dummy data will be created on the Windows Server. Using the established Mythic C2 connection, the file will then be transferred from the Windows Server to the Mythic C2 server.
+
+This attack simulation will generate activity across several stages of an attack, allowing me to investigate the resulting logs and alerts within Elastic and see how the different stages of the attack appear from a SOC analyst's perspective.
+
+<img width="3036" height="9120" alt="image" src="https://github.com/user-attachments/assets/6c2f3720-c58b-43a9-865c-ad7ca209b8a6" />
+
+
 
