@@ -276,6 +276,14 @@ This attack simulation will generate activity across several stages of an attack
 
 <img width="2548" height="9120" alt="image" src="https://github.com/user-attachments/assets/6480d532-133b-4a9e-b1a5-2d8a4fa87d9b" />
 
+### Mythic C2 Server Setup
 
+Set up a dedicated **Ubuntu cloud instance** to host the Mythic Command and Control (C2) server for the attack simulation.
+
+The Mythic server was placed behind its own firewall, with rules configured to restrict access to only the systems required for the lab. Access was permitted from my **personal PC**, **Kali Linux attacker machine**, and **Windows Server victim machine**.
+
+This helps keep the C2 infrastructure isolated while still allowing the required communication between the different systems used throughout the attack simulation.
+
+<img width="2557" height="1113" alt="image" src="https://github.com/user-attachments/assets/57caebd5-7321-4f5c-b92f-2bba5fa284b6" />
 
 
