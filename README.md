@@ -274,7 +274,8 @@ A test file named `passwords.txt` containing dummy data will be created on the W
 
 This attack simulation will generate activity across several stages of an attack, allowing me to investigate the resulting logs and alerts within Elastic and see how the different stages of the attack appear from a SOC analyst's perspective.
 
-<img width="3036" height="9120" alt="image" src="https://github.com/user-attachments/assets/6c2f3720-c58b-43a9-865c-ad7ca209b8a6" />
+<img width="2548" height="9120" alt="image" src="https://github.com/user-attachments/assets/6480d532-133b-4a9e-b1a5-2d8a4fa87d9b" />
+
 
 
 
