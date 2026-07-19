@@ -202,4 +202,34 @@ By grouping events using the source IP address and targeted username, these upda
 
 <img width="2308" height="1016" alt="image" src="https://github.com/user-attachments/assets/5edc7195-2477-42fb-a5eb-ff2a84b84431" />
 
+### Adding RDP Authentication Maps to the Dashboard
+
+Created two additional maps in Kibana to visualise **failed and successful RDP authentication attempts**. These were added to the existing dashboard alongside the two previously created **SSH authentication maps**.
+
+For successful RDP authentication, I used Windows Event ID `4624` and filtered the `winlog.event_data.LogonType` field for **Logon Type 10** (RemoteInteractive/RDP) and **Logon Type 7** (Unlock).
+
+The following KQL query was used:
+
+```kql
+event.code: 4624 and (winlog.event_data.LogonType: 10 or winlog.event_data.LogonType: 7)
+
+```
+
+<img width="2558" height="730" alt="image" src="https://github.com/user-attachments/assets/5d417e5e-749b-4c79-87d0-a0c7f6da5055" />
+
+### Adding Authentication Tables to the Dashboard
+
+Created four tables to provide a clearer view of the authentication activity being collected from the Windows and Linux endpoints. Two tables show **successful and failed SSH authentication attempts**, while the other two show **successful and failed RDP authentication attempts**.
+
+Each table displays the **top 10 results** using the following fields:
+
+- `user.name` – The username used during the authentication attempt.
+- `source.ip` – The source IP address of the connection.
+- `source.geo.country_name` – The country associated with the source IP address.
+- `Count of records` – The number of authentication events.
+
+These tables were added alongside the authentication maps on the dashboard. The maps give a visual overview of where authentication attempts are coming from, while the tables provide more detailed information about the usernames, source IP addresses, countries, and number of authentication attempts.
+
+<img width="2555" height="1263" alt="image" src="https://github.com/user-attachments/assets/ac8f54a7-eb35-488f-92fd-1c19db9db025" />
+
 
