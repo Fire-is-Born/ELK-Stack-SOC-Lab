@@ -362,6 +362,16 @@ These commands simulate some basic enumeration that an attacker might perform af
 
 <img width="728" height="452" alt="image" src="https://github.com/user-attachments/assets/f2466ac8-a5e2-4fce-ac3c-71ed7300c2a1" />
 
+## Phase 3 – Defence Evasion
+
+To simulate defence evasion, I opened **Windows Security** and disabled **Microsoft Defender real-time protection** and **cloud-delivered protection**.
+
+This simulates an attacker attempting to disable security controls after gaining access to a system.
+
+<img width="1014" height="752" alt="image" src="https://github.com/user-attachments/assets/1cc8517a-8fc2-4616-95af-36df6a415d39" />
+
+
+
 
 
 
