@@ -309,3 +309,59 @@ This resulted successful authentication, providing realistic activity that can b
 
 <img width="1678" height="281" alt="image" src="https://github.com/user-attachments/assets/bf9bdb61-b222-4236-89f8-0d6726e6b027" />
 
+After successfully finding the Administrator password during the RDP brute-force attack, I logged into the Windows machine from my Kali Linux machine using `xfreerdp`.
+
+## Phase 2 – Windows Enumeration
+
+After successfully gaining access to the Windows machine, I ran several commands to gather some basic information about the system and the Administrator account.
+
+Used:
+
+```cmd
+whoami
+```
+
+to confirm the account I was currently logged in as.
+
+Then ran:
+
+```cmd
+ipconfig
+```
+
+to view the machine's network configuration and IP address.
+
+Used:
+
+```cmd
+net user
+```
+
+to list the local user accounts on the Windows machine.
+
+I also tried:
+
+```cmd
+net group
+```
+
+This returned an error because the machine is not a Windows Domain Controller.
+
+
+<img width="595" height="512" alt="image" src="https://github.com/user-attachments/assets/25882def-0213-4ad9-9530-65d68f6a9c53" />
+
+Finally, I ran:
+
+```cmd
+net user administrator
+```
+
+to get more information about the Administrator account, including whether the account was active, password settings, last logon time, and group membership.
+
+These commands simulate some basic enumeration that an attacker might perform after gaining access to a Windows system.
+
+<img width="728" height="452" alt="image" src="https://github.com/user-attachments/assets/f2466ac8-a5e2-4fce-ac3c-71ed7300c2a1" />
+
+
+
+
