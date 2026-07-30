@@ -450,4 +450,135 @@ This simulated an attacker using an established C2 channel to retrieve data from
 
 <img width="2317" height="706" alt="image" src="https://github.com/user-attachments/assets/40394349-351e-45d9-892d-6d0a340a71f3" />
 
-With the attack simulation complete, the activity generated across the different phases can now be investigated in Elastic, including the initial authentication activity, system enumeration, defence evasion, payload execution, C2 communication, and data exfiltration.
+
+## Investigating the Mythic Payload
+
+After establishing a callback from the Mythic agent, I searched for the payload name:
+
+```kql
+svchost-MyDFIR.exe
+```
+<img width="2258" height="1040" alt="image" src="https://github.com/user-attachments/assets/a3d140ab-6570-40ca-84d6-6aeacd3e667b" />
+This returned all logs associated with the payload, allowing me to follow its execution through Sysmon.
+
+### File Creation (Sysmon Event ID 11)
+
+The first event identified was a **File Create** event (Sysmon Event ID 11), confirming the payload had been written to disk.
+
+Relevant fields included:
+
+```text
+winlog.event_data.TargetFilename:
+C:\Users\Public\Downloads\svchost-MyDFIR.exe
+
+User:
+MYDFIR-WIN\Administrator
+```
+
+This confirmed the executable was dropped into the Public Downloads directory by the Administrator account.
+
+---
+
+### Process Creation (Sysmon Event ID 1)
+
+Next, I searched for **Sysmon Event ID 1** to identify when the payload was executed.
+<img width="2261" height="1130" alt="image" src="https://github.com/user-attachments/assets/65d25895-2cdd-45a7-bfa3-77ffa1906330" />
+The Process Create event contained additional information including the file hashes, original filename and parent process.
+
+One interesting observation was that although the executable had been renamed to **svchost-MyDFIR.exe**, the embedded metadata still contained its original filename:
+
+```text
+winlog.event_data.OriginalFileName:
+Apollo.exe
+```
+
+This is useful during investigations, as attackers often rename payloads while leaving the original PE metadata untouched.
+
+The parent process was also **powershell.exe**, matching the delivery method used during the attack.
+
+---
+
+### Hash Analysis
+
+The Process Create event exposed several useful hashes:
+
+```text
+SHA1:
+E00AF41759DBDAEC0E5F084D97BA2FF56B9E269C
+
+MD5:
+EA1E165C42F9AEA7031B1F387757BCFC
+
+SHA256:
+DDA32F10E87847B5721744BEFA8BA92CB1D3F28A0889B47AE5C1DA3BBD07091B
+
+IMPHASH:
+F34D5F2D4577ED6D9CEEC516C1F5A744
+```
+
+I checked the SHA1 hash against VirusTotal, which returned **0 detections**. This is expected for a freshly generated Mythic payload, as the payload can be regenerated with different hashes, making simple hash-based detections unreliable. However, checking the reputation of a file is still a worthwhile step during any investigation.
+
+---
+
+### Creating a Detection Rule
+
+To create a simple detection, I searched for the process creation event alongside the payload name and either the known SHA256 hash or the original filename.
+
+```kql
+svchost-MyDFIR.exe and event.code: 1 and winlog.event_data.Hashes: *DDA32F10E87847B5721744BEFA8BA92CB1D3F28A0889B47AE5C1DA3BBD07091B*
+or winlog.event_data.OriginalFileName: Apollo.exe
+
+```
+<img width="2254" height="1125" alt="image" src="https://github.com/user-attachments/assets/efe90459-359d-47eb-8b87-bd10c153915c" />
+
+
+The initial query returned two events because it matched both **Sysmon Event ID 1 (Process Create)** and **Sysmon Event ID 7 (Image Loaded)**.
+
+For this detection I only wanted to identify when the payload was **executed**, so I refined the query to look exclusively for **Process Create** events. This also meant the payload name was no longer required, as the SHA256 hash and original filename were sufficient indicators.
+
+```kql
+event.code: 1 and (
+  winlog.event_data.Hashes: *DDA32F10E87847B5721744BEFA8BA92CB1D3F28A0889B47AE5C1DA3BBD07091B* or
+  winlog.event_data.OriginalFileName: Apollo.exe
+)
+```
+
+This returned a single matching event representing the execution of the Mythic payload.
+
+I then created a **Custom Query** detection rule in Elastic Security using this query and assigned it a **Critical** severity.
+
+To make investigations easier, I configured the alert to display several useful fields:
+
+- `@timestamp`
+- `host.hostname`
+- `message`
+- `winlog.event_data.CommandLine`
+- `winlog.event_data.Image`
+- `winlog.event_data.ParentCommandLine`
+- `winlog.event_data.ParentImage`
+- `winlog.event_data.ProcessGuid`
+- `winlog.event_data.User`
+
+These fields provide useful context during triage, allowing an analyst to quickly identify what executed, how it was launched, the parent process responsible and which user account was involved.
+
+## Threat Hunting Dashboard
+
+To complement the detection rule, I created a dashboard highlighting several high-value Sysmon events that are commonly used during investigations.
+
+### Sysmon Event ID 3 - Network Connections
+
+Displays processes initiating outbound network connections, making it easier to identify suspicious external communications.
+
+### Sysmon Event ID 1 - Process Creation
+
+Monitors newly created processes with a focus on commonly abused Windows utilities such as:
+
+- `powershell.exe`
+- `cmd.exe`
+- `rundll32.exe`
+
+These are frequently used by attackers for execution, persistence and post-exploitation activities.
+
+### Sysmon Event ID 5001
+
+Displays events where **Microsoft Defender real-time protection** has been disabled. Since attackers commonly attempt to disable security controls early in an intrusion, this provides a useful indicator of potential compromise.
