@@ -723,3 +723,41 @@ Ideally, I wanted to display the full event message. However, Lens does not curr
 In this lab only a single host was monitored, so the hostname is already known. In a production environment, however, including the hostname would be essential for quickly identifying which endpoint generated the alert.
 
 <img width="2559" height="1122" alt="image" src="https://github.com/user-attachments/assets/88b06b26-7c1f-4752-bd10-e8435a9a0d2c" />
+
+## osTicket Server Setup
+
+A **Windows Server 2022** virtual machine was created to host the osTicket environment. After connecting via RDP, **XAMPP** was installed to provide the Apache web server, PHP and MySQL services required by osTicket.
+
+### Configure Apache
+
+The Apache configuration file was edited to replace `localhost` with the server's IP address, allowing the web server to be accessed remotely.
+
+
+
+### Configure phpMyAdmin
+
+Within the `phpMyAdmin` directory, a backup of `config.inc.php` was created before making any changes.
+
+The MySQL host was then updated from `localhost` to the server's IP address:
+
+```php
+$cfg['Servers'][$i]['host'] = 'Public IP';
+$cfg['Servers'][$i]['connect_type'] = 'tcp';
+```
+
+
+### Configure Windows Firewall
+
+A new inbound Windows Defender Firewall rule was created to allow:
+
+- TCP **80** (HTTP)
+- TCP **443** (HTTPS)
+
+### Start Services
+
+The **Apache** and **MySQL** services were started from the XAMPP Control Panel.
+
+To verify the installation, phpMyAdmin was opened in a web browser and a successful connection to the MariaDB server confirmed that the web server and database services were functioning correctly.
+
+
+<img width="1750" height="1106" alt="image" src="https://github.com/user-attachments/assets/284ce536-0a1e-4c7b-8032-4bc4e7dcb701" />
