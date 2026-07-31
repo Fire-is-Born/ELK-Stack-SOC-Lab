@@ -168,7 +168,7 @@ Also decided to duplicate that map and modify the KQL to show successful SSH att
 <img width="1536" height="1180" alt="image" src="https://github.com/user-attachments/assets/0670ae1c-4994-4827-9f86-4d47f4d5f507" />
 
 
-### RDP Failed Avtivity
+### RDP Failed Activity
 
 Decided to create the same search for RDP for the Windows machine. 
 
@@ -761,3 +761,48 @@ To verify the installation, phpMyAdmin was opened in a web browser and a success
 
 
 <img width="1750" height="1106" alt="image" src="https://github.com/user-attachments/assets/284ce536-0a1e-4c7b-8032-4bc4e7dcb701" />
+
+### osTicket Installation & Configuration
+
+To make the lab feel more like a real SOC environment, I installed **osTicket** on the Windows Server 2022 VM to act as a helpdesk and ticketing system.
+
+I created a new MySQL database called `MyDFIR-Lab-DB` in phpMyAdmin, granted the required permissions, and completed the osTicket setup through the web installer. Once the installation was complete, I secured the configuration by resetting the permissions on the `ost-config.php` file:
+
+<img width="851" height="438" alt="image" src="https://github.com/user-attachments/assets/e2bda378-859b-4fb3-9eb1-f79feaa018fd" />
+
+```powershell
+icacls include\ost-config.php /reset
+```
+
+Finally, I connected to the helpdesk from my SOC Analyst workstation to confirm everything was working as expected.
+
+<img width="1019" height="427" alt="image" src="https://github.com/user-attachments/assets/f7c7cd8a-0688-42a1-9a7b-1cc00d6ac3e4" />
+
+This gives the lab a dedicated ticketing platform that can be used later for documenting incidents and practising a more realistic SOC workflow.
+
+
+## Elastic Webhook Integration with osTicket
+
+To improve the realism of the SOC lab, I integrated **Elastic** with **osTicket** so alerts can automatically generate helpdesk tickets. This simulates how many SOCs track incidents through an ITSM or ticketing platform.
+
+### Configuration
+
+An API key was created in osTicket and restricted to the ELK server's private IP address. This key is used to authenticate requests sent from Elastic to the osTicket API.
+
+Within **Kibana**, I navigated to **Stack Management → Connectors** and created a new **Webhook** connector. The connector was configured to send HTTP POST requests to the osTicket API endpoint using the API key for authentication.
+
+<img width="1669" height="1143" alt="image" src="https://github.com/user-attachments/assets/2a2239f0-02a0-4b51-9e26-f29844324bb4" />
+
+### Result
+
+The connector successfully created a new ticket in osTicket containing the test alert, message content and file attachments.
+
+<img width="1027" height="1169" alt="image" src="https://github.com/user-attachments/assets/c5a1b169-fdd8-4b32-8627-280eafa170fe" />
+
+
+This integration provides a realistic incident management workflow where security alerts can be tracked, assigned and investigated through a ticketing system, closely reflecting how many Security Operations Centres manage incidents.
+
+The ticketing system also supports the **Accounting** component of the **AAA (Authentication, Authorisation and Accounting)** model by maintaining an audit trail of security events, investigations and analyst actions.
+
+
+
