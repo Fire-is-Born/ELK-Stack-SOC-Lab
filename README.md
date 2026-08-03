@@ -826,5 +826,88 @@ The rule itself successfully triggered the webhook and created a ticket in osTic
 
 <img width="1092" height="1078" alt="image" src="https://github.com/user-attachments/assets/f46e5c2d-7e0d-41fc-a457-f69c017a97dc" />
 
+## RDP Brute-Force Investigation
+
+Next, I tested the **RDP brute-force detection rule** and investigated one of the alerts it generated.
+
+### Alert Details
+
+<img width="2303" height="1173" alt="RDP brute-force alert" src="https://github.com/user-attachments/assets/58c8d3e8-1ed0-4459-b4cf-94290e425c7f" />
+
+From the alert, I identified:
+
+- **Source IP:** `71.172.38.43`
+- **Targeted user:** `Administrator`
+- **Events:** 5 failed authentication events
+
+The RDP brute-force rule was also configured to use the **osTicket webhook connector** and to run **every 1 minute**. This allows detected RDP brute-force activity to automatically generate a ticket in osTicket for further investigation.
+
+### Investigating the Source IP
+
+I then investigated the source IP and worked through the same questions used during the SSH brute-force investigation.
+
+#### Is this IP known to perform brute-force activity?
+
+**Yes.**
+
+Threat intelligence checks showed that the IP has previously been associated with malicious/brute-force activity.
+
+<img width="1456" height="1217" alt="IP reputation check" src="https://github.com/user-attachments/assets/7edf7b37-73de-42b1-8d45-523db962caea" />
+
+#### Were any other users affected by this IP?
+
+**No.** Searching the activity associated with `71.172.38.43` showed that only the `Administrator` account was targeted.
+
+<img width="2531" height="1101" alt="Elastic user investigation" src="https://github.com/user-attachments/assets/a634df44-c18d-4b0d-a280-5585d6bad48e" />
+
+#### Were any login attempts successful?
+
+**No.** I found no successful authentication attempts associated with the source IP.
+
+#### What activity occurred after the login?
+
+As there were **no successful logins**, there was no post-login activity to investigate.
+
+### Successful RDP Login from Kali Linux
+
+I then checked for RDP activity originating from the IP address associated with my **Kali Linux machine**. Unlike the previous external brute-force attempt, this test resulted in a successful authentication.
+
+<img width="1972" height="626" alt="image" src="https://github.com/user-attachments/assets/2751677d-674f-4eb9-a9f4-7bc2bf70bdd3" />
+
+**Is this IP known to perform brute-force activity?**  
+No.
+
+**Were any other users affected by this IP?**  
+No. Only the `Administrator` account was targeted.
+
+**Were any login attempts successful?**  
+Yes. A successful Windows logon (**Event ID 4624**) was identified for the `Administrator` account.
+
+### Investigating Activity After the Login
+
+To investigate what happened after the successful login, I took the **Target Logon ID** from the Event ID 4624 event:
+
+`0x2fa965f`
+
+I then added the Target Logon ID, hostname and `Administrator` account to the search before removing the other filters. This left me with the following search for the `MyDFIR-WIN` host:
+
+```text
+Administrator and 0x2fa965f
+```
+
+<img width="1719" height="585" alt="image" src="https://github.com/user-attachments/assets/ec352ac5-18f3-4d15-847b-1c904d7d4345" />
+
+Using the Logon ID allowed me to follow events associated with that specific login session.
+
+The results showed:
+
+- **Logged in:** Aug 3, 2026 @ 12:06:18.265
+- **Logged off:** Aug 3, 2026 @ 12:06:19.068
+- The `Administrator` account was assigned special privileges during the session.
+
+The account logged in and then logged off less than a second later. This suggests the login was **automated as part of the brute-force test**, rather than someone establishing and using an interactive RDP session.
+
+No further activity associated with this Logon ID was identified.
+
 
 
