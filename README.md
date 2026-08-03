@@ -804,5 +804,27 @@ This integration provides a realistic incident management workflow where securit
 
 The ticketing system also supports the **Accounting** component of the **AAA (Authentication, Authorisation and Accounting)** model by maintaining an audit trail of security events, investigations and analyst actions.
 
+## Automating osTicket Creation from Elastic Alerts
+
+I added the **osTicket webhook connector** as an action on my SSH brute-force detection rule. This allows Elastic to automatically create an osTicket ticket when the rule triggers.
+
+The XML body uses Elastic variables so information from the alert can be added to the ticket:
+
+```xml
+<ticket alert="true" autorespond="true" source="API">
+    <name>Elastic</name>
+    <email>api@osticket.com</email>
+    <subject>{{rule.name}}</subject>
+    <message type="text/plain"><![CDATA[Please investigate the rule: {{rule.name}}
+    Link: {{rule.url}}]]></message>
+</ticket>
+```
+<img width="1255" height="1110" alt="image" src="https://github.com/user-attachments/assets/0ee286cd-66b1-4b2a-9274-3ad559cd0498" />
+I also made changes to the `.yml` configuration on the ELK server to allow `{{rule.url}}` to generate a link back to Elastic. However, the URL still did not populate in the ticket and will need further troubleshooting.
+
+The rule itself successfully triggered the webhook and created a ticket in osTicket with the correct **rule name and investigation message**, confirming the main integration is working.
+
+<img width="1092" height="1078" alt="image" src="https://github.com/user-attachments/assets/f46e5c2d-7e0d-41fc-a457-f69c017a97dc" />
+
 
 
