@@ -35,7 +35,7 @@ Build an end-to-end Security Operations Centre (SOC) homelab using the ELK Stack
 
 # Lab Build Process
 
-## 1. Lab Architecture
+## Lab Architecture
 
 The diagram below illustrates the overall architecture of the SOC homelab.
 
@@ -48,9 +48,9 @@ Windows and Ubuntu endpoints are hosted outside the VPC and securely forward tel
 
 ---
 
-# 2. Deploying the ELK Stack
+# Deploying the ELK Stack
 
-## 2.1 Provisioning the Server
+## Provisioning the Server
 
 Provisioned an Ubuntu cloud instance within Vultr and secured remote access by creating a firewall group that only permits SSH connections from my public IP address. After connecting via SSH, I updated the operating system before installing Elasticsearch.
 
@@ -62,7 +62,7 @@ Installed Elasticsearch, enabled the service to start automatically at boot, and
 
 ---
 
-## 2.2 Installing Kibana
+## Installing Kibana
 
 Installed Kibana on the Ubuntu server. Once Elasticsearch was confirmed to be operational, generated a Kibana enrolment token from the `elasticsearch/bin` directory to securely authenticate Kibana with the Elasticsearch cluster.
 
@@ -80,7 +80,7 @@ The generated token was used during Kibana's initial setup to establish a truste
 
 ---
 
-## 2.3 Configuring Kibana
+## Configuring Kibana
 
 Connected to Kibana using the enrolment token generated during the previous step. During the initial configuration, Kibana prompted for three encryption keys required to securely store encrypted saved objects and enable alerting, actions, and other security features.
 
@@ -94,14 +94,14 @@ After restarting the service, logged back into Kibana and verified that the conf
 
 ---
 
-## 3.0 Installing Windows Server
+## Installing Windows Server
 
 Deployed a Windows Server 2022 cloud instance outside the Vultr VPC to simulate a monitored endpoint on an external network. Configured Remote Desktop Protocol (RDP) to allow inbound connections from the internet, enabling the server to receive automated scans and authentication attempts. This generated realistic Windows security telemetry, which will be collected by Elastic Agent and forwarded to the ELK Stack for analysis, detection engineering, and threat hunting.
 
 ---
 
 
-## 3.1 Installing Elastic Agent
+## Installing Elastic Agent
 
 To onboard the Windows endpoint into the ELK Stack, Elastic Agent was downloaded directly from the Fleet management interface and installed using the generated enrolment command.
 
@@ -111,7 +111,7 @@ After successful enrolment, the Elastic Agent appeared in **Fleet**, confirming 
 
 ---
 
-## 3.2 Verifying Log Ingestion
+## Verifying Log Ingestion
 
 With the agent successfully enrolled, Windows Security events began flowing into Elasticsearch. Using Kibana Discover, the Windows host was filtered to verify that authentication events and other telemetry were being ingested correctly.
 
@@ -120,7 +120,7 @@ This confirmed that the Windows endpoint was successfully forwarding logs to the
 <img width="2550" height="630" alt="image" src="https://github.com/user-attachments/assets/9cf3b19f-1936-4cf6-b13b-c14788c4f1d6" />
 
 
-## 3.2 Sysmon
+## Sysmon
 
 Downloaded Sysmon and the Olaf Hartong configuration file, then installed Sysmon on the Windows endpoint using the custom configuration to enhance Windows event logging for security monitoring in Elastic.
 
